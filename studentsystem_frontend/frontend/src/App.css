@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fcf5ff;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  background-color: #7b2fff;
+  color: rgb(255, 255, 255);
+  padding: 15px;
+  text-align: center;
+}
+
+.form-container {
+  background-color: white;
+  width: 400px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.form-title {
+  text-align: center;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+form input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 375px;
+}
+
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.student-list {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.student-card {
+  background-color: white;
+  margin: 10px auto;
+  padding: 15px;
+  width: 420px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  text-align: left;
+}
+
