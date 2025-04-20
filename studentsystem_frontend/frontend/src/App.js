@@ -4,44 +4,63 @@ import './App.css';
 function App() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [students, setStudents] = useState([])
-  const [student , setStudent] = useState([])
+  const [students, setStudents] = useState([]);
 
   const handleClick = (e) => {
-    e.preventDefault()
-    const student = { name, address }
+    e.preventDefault();
+    const newStudent = { name, address };
 
-    console.log(student)
     fetch("http://localhost:8080/student/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(student)
+      body: JSON.stringify(newStudent)
     }).then(() => {
-      console.log("New Student Added")
-      setStudent(student)
-    })
-  }
+      console.log("New Student Added");
+      setName('');
+      setAddress('');
+      fetchStudents(); // Refresh student list after adding
+    });
+  };
 
-  useEffect(() => {
+  const fetchStudents = () => {
     fetch("http://localhost:8080/student/getAll")
       .then(res => res.json())
       .then((result) => {
         setStudents(result);
-        console.log("student list", result);
+        console.log("Student list:", result);
       });
-  }, [student]);
+  };
 
+  // 🔥 DELETE student by ID
+  const handleDelete = (id) => {
+    fetch(`http://localhost:8080/student/delete?id=${id}`, {
+      method: "DELETE"
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to delete student");
+        }
+        fetchStudents(); 
+        // handle success (e.g., refresh data or update state)
+      })
+      .catch(error => {
+        console.error("Error deleting student:", error);
+      });
+  };
 
+  useEffect(() => {
+    fetchStudents(); // Load students on component mount
+  }, []);
 
   return (
     <div>
       <div className="navbar">
-        <h2>Student Management System</h2>
+        <h2>STUDENT MANAGEMENT SYSTEM</h2>
       </div>
 
       <div className="form-container">
         <h3 className="form-title">Add Student</h3>
-        <form >
+        <form>
           <input
             type="text"
             name="name"
@@ -58,24 +77,40 @@ function App() {
             onChange={(e) => setAddress(e.target.value)}
             required
           />
-          <button type="submit" onClick={handleClick}>SUBMIT</button>
+          <button type="submit" onClick={handleClick}>Add</button>
         </form>
-
       </div>
 
       <div className="student-list">
-        <h3>Students</h3>
-        {students.length > 0 ? (
-          students.map((student) => (
-            <div className="student-card" key={student.id}>
-              <p><strong>Id:</strong> {student.id}</p>
-              <p><strong>Name:</strong> {student.name}</p>
-              <p><strong>Address:</strong> {student.address}</p>
-            </div>
-          ))
-        ) : (
-          <p>No students available</p>
-        )}
+        <h3>Records</h3>
+        <table className="student-table">
+          <thead className="table-header">
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students.map((student) => (
+              <tr key={student.id}>
+                <td>{student.id}</td>
+                <td>{student.name}</td>
+                <td>{student.address}</td>
+                <td>
+                  <button className="btn btn-secondary me-2">Edit</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(student.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
